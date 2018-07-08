@@ -1,0 +1,35 @@
+.pagination-button {
+    font-family: monospace;
+    font-weight: bold;
+    text-decoration: none;
+    background-color: #669;
+    color: #fff;
+    padding: 4px 8px;
+    border-radius: 4px;
+    margin-right: 2px;
+    display: inline-block;
+    width: 2rem;
+    text-align: center;
+}
+
+.pagination-button:hover {
+    color: #ccc;
+}
+
+.pagination-button[disabled] {
+    background-color: #889;
+    pointer-events: none;
+}
+
+.pagination-button.current-page {
+    background-color: #55d;
+    pointer-events: none;
+}
+
+.pagination-info {
+    font-family: monospace;
+    font-weight: bold;
+    font-size: 14px;
+    color: #669;
+    line-height: 2;
+}
