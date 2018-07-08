@@ -7,7 +7,7 @@ class CityModel extends Model
 
     public function country()
     {
-        return $this->hasOne('CountryModel', 'country_id');
+        return $this->belongsTo('CountryModel', 'country_id');
     }
 
 }

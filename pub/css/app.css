@@ -1,3 +1,8 @@
+header, footer {
+    background-color: #ccc;
+    padding: 1rem;
+}
+
 .pagination-button {
     font-family: monospace;
     font-weight: bold;

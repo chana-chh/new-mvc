@@ -233,7 +233,7 @@ abstract class Model
      * @param string $fk Strani kljuc koji povezuje tabelu trenutnog modela sa tabelom povezanog modela
      * @return Model
      */
-    public function hasOne($f_model_class, $fk)
+    public function belongsTo($f_model_class, $fk)
     {
         $m = new $f_model_class();
         $sql = "SELECT * FROM `{$m->getTable()}` WHERE `{$m->getPrimaryKey()}` = :fk;";
