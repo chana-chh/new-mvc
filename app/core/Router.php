@@ -1,7 +1,7 @@
 <?php
 
-class Router
-{
+class Router {
+
     // Putanje aplikacije
     private $routes = [];
     // Putanje aplikacije sa imenom
@@ -11,15 +11,13 @@ class Router
     // Cela putanja iz zahteva
     private $request_route = null;
 
-    public function addRoutes($routes)
-    {
+    public function addRoutes($routes) {
         foreach ($routes as $route) {
             call_user_func_array(['Router', 'map'], $route);
         }
     }
 
-    private function map($method, $route, $target, $name = null)
-    {
+    private function map($method, $route, $target, $name = null) {
         // TODO Proveriti da li je puanja konfliktna
         $this->routes[] = [$method, $route, $target, $name];
         if ($name) {
@@ -31,8 +29,7 @@ class Router
         }
     }
 
-    public function match()
-    {
+    public function match() {
         // Putanja iz zahteva (adresa)
         $request_uri = substr(SERVER['REQUEST_URI'], strlen(BASE));
         $this->request_route = URL . $request_uri;
@@ -125,8 +122,7 @@ class Router
         greska('Nije pronađena putanja.', $request_uri);
     }
 
-    public function generate($routeName, array $params = [])
-    {
+    public function generate($routeName, array $params = []) {
         if (!isset($this->named_routes[$routeName])) {
             greska('Ne postoji putanja sa tražnim imenom', $routeName);
         }
@@ -151,20 +147,23 @@ class Router
             greska('Neodgovarajući broj parametara za putanju (' . $routeName . ')', "Prosleđeno: {$params_count} , očekuje {$route_params_parts_count}");
         }
 
-        $route_name = '/' . implode('/', $route_name_parts);
-        $route_params = '/' . implode('/', $params);
-        $url = URL . $route_name . $route_params;
+        $url = URL . '/';
+        if ($route_name_parts[0] !== '/' && count($route_name_parts) >= 1) {
+            $url .= implode('/', $route_name_parts);
+        }
+
+        if ($route_params_parts_count > 0) {
+            $url .= '/' . implode('/', $params);
+        }
 
         return $url;
     }
 
-    public function getCurrentUriName()
-    {
+    public function getCurrentUriName() {
         return $this->request_route_name;
     }
 
-    public function getCurrentUri()
-    {
+    public function getCurrentUri() {
         return $this->request_route;
     }
 

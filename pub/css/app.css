@@ -1,6 +1,38 @@
+html {
+    background-color: #eee;
+}
+
 header, footer {
     background-color: #ccc;
     padding: 1rem;
+}
+
+.logo {
+    color: orangered;
+    text-decoration: none;
+}
+
+.list-title{
+    font-size: 18px;
+    font-weight: bold;
+    color: #a55;
+}
+
+.list-subtitle {
+    font-size: 14px;
+    font-weight: bold;
+    color: #5a5;
+}
+
+li {
+    margin-bottom: 0;
+}
+
+.list-link a {
+    font-size: 12px;
+    font-weight: bold;
+    color: #55a;
+    text-decoration: none;
 }
 
 .pagination-button {
