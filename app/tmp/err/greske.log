@@ -9883,3 +9883,10 @@ Stack trace:
 [08-Jul-2018 15:01:32 Europe/Belgrade] PHP Notice:  Trying to get property of non-object in C:\xampp\htdocs\new-mvc\app\views\sql\pocetna.php on line 6
 [08-Jul-2018 15:01:54 Europe/Belgrade] PHP Notice:  Trying to get property of non-object in C:\xampp\htdocs\new-mvc\app\views\sql\pocetna.php on line 6
 [08-Jul-2018 15:02:08 Europe/Belgrade] PHP Notice:  Trying to get property of non-object in C:\xampp\htdocs\new-mvc\app\views\sql\pocetna.php on line 6
+[09-Jul-2018 11:41:10 Europe/Belgrade] PHP Notice:  Undefined variable: rez in C:\xampp\htdocs\new-mvc\app\views\home\pocetna.php on line 6
+[09-Jul-2018 15:12:53 Europe/Belgrade] PHP Notice:  Undefined offset: 1 in C:\xampp\htdocs\new-mvc\app\core\View.php on line 64
+[09-Jul-2018 15:14:00 Europe/Belgrade] PHP Notice:  Undefined offset: 1 in C:\xampp\htdocs\new-mvc\app\core\View.php on line 64
+[09-Jul-2018 15:14:02 Europe/Belgrade] PHP Notice:  Undefined offset: 1 in C:\xampp\htdocs\new-mvc\app\core\View.php on line 64
+[09-Jul-2018 15:14:28 Europe/Belgrade] PHP Notice:  Undefined offset: 1 in C:\xampp\htdocs\new-mvc\app\core\View.php on line 65
+[09-Jul-2018 15:14:47 Europe/Belgrade] PHP Notice:  Undefined offset: 1 in C:\xampp\htdocs\new-mvc\app\core\View.php on line 65
+[09-Jul-2018 15:22:03 Europe/Belgrade] PHP Notice:  Undefined offset: 0 in C:\xampp\htdocs\new-mvc\app\core\View.php on line 62

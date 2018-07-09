@@ -13,8 +13,9 @@
 
         <div class="container">
             <header>
-                <h1><a href="<?= $this->app->router->generate('get.pocetna') ?>"><?= isset($naslov) ?: APP_NAME; ?></a></h1>
+                <h1><a href="<?= $this->app->router->generate('get.pocetna') ?>" class="logo"><?= isset($naslov) ?: APP_NAME; ?></a></h1>
                 <a href="<?= $this->app->router->generate('get.pocetna') ?>">Home</a> |
+                <a href="https://mariadb.com/kb/en/" target="_blank">MariaDB</a> |
             </header>
 
             <noscript>

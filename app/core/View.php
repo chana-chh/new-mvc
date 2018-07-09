@@ -1,16 +1,14 @@
 <?php
 
-class View
-{
+class View {
+
     private $app;
 
-    public function __construct()
-    {
+    public function __construct() {
         $this->app = App::instance();
     }
 
-    public function render($view_path, $data = [])
-    {
+    public function render($view_path, $data = []) {
 
         // sadrzaj view fajla
         $content = '';
@@ -43,9 +41,10 @@ class View
         } else {
             greska('Nije pronađen template fajl.', $full_template_path);
         }
+
         // trazenje blokova u templejtu
         preg_match_all('#{{(.*)}}#', $template, $pm_template);
-        // niza blokova iz templejta
+        // niz blokova iz templejta
         $template_blocks = $pm_template[1];
 
         // trazenje sadrzaja blokova u view fajlu
@@ -55,6 +54,25 @@ class View
             $block_end = '{{' . $block . 'END }}';
             $rezultat = getStringBetween($content, $block_begin, $block_end);
             $blocks[$block] = $rezultat;
+        }
+
+        foreach ($blocks as $key => $value) {
+            preg_match_all('#{!(.*)!}#', $value, $pm_include);
+            $tmp = $pm_include[1];
+            if (!empty($tmp)) {
+                foreach ($tmp as $inc) {
+                    $include_file = DIR . 'app/views/inc/' . strtolower(trim($tmp[0])) . '.php';
+                    // popunjavanje include
+                    if (file_exists($include_file)) {
+                        ob_start();
+                        require_once $include_file;
+                        $include = ob_get_clean();
+                    } else {
+                        greska('Nije pronađen include fajl.', $include_file);
+                    }
+                    str_replace('{!' . $inc . '!}', $include, $value);
+                }
+            }
         }
 
         // zamena blokova sa sadrzajem
