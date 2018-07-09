@@ -6,6 +6,7 @@
         <link rel="stylesheet" type="text/css" href="<?= URL . '/css/normalize.css'; ?>">
         <link rel="stylesheet" type="text/css" href="<?= URL . '/css/skeleton.css'; ?>">
         <link rel="stylesheet" type="text/css" href="<?= URL . '/css/app.css'; ?>">
+        <link rel="stylesheet" type="text/css" href="<?= URL . '/css/highlight/darcula.css'; ?>">
         <link rel="icon" href="<?= URL . '/favicon.ico'; ?>" type="image/x-icon">
     </head>
 
@@ -16,6 +17,7 @@
                 <h1><a href="<?= $this->app->router->generate('get.pocetna') ?>" class="logo"><?= isset($naslov) ?: APP_NAME; ?></a></h1>
                 <a href="<?= $this->app->router->generate('get.pocetna') ?>">Home</a> |
                 <a href="https://mariadb.com/kb/en/" target="_blank">MariaDB</a> |
+                <a href="http://www.mysqltutorial.org/" target="_blank">MySQL Tutorial</a> |
             </header>
 
             <noscript>
@@ -35,7 +37,8 @@
                 <p>Copyright &copy; <?= 'Chana - ' . date('Y'); ?></p>
             </footer>
         </div>
-
+        <script src="<?= URL . '/js/highlight.js'; ?>"></script>
+        <script>hljs.initHighlightingOnLoad();</script>
     </body>
 
 </html>

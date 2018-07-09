@@ -1,7 +1,7 @@
 {@ DEFAULT @}
 
 {{ CONTENT BEGIN }}
-<h1>Aj sad</h1>
+<h3>Aj sad</h3>
 {{ CONTENT END }}
 
 {{ ASIDE BEGIN }}

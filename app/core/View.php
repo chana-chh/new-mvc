@@ -1,15 +1,16 @@
 <?php
 
-class View {
-
+class View
+{
     private $app;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->app = App::instance();
     }
 
-    public function render($view_path, $data = []) {
-
+    public function render($view_path, $data = [])
+    {
         // sadrzaj view fajla
         $content = '';
         // sadrzaj template fajla
@@ -70,7 +71,7 @@ class View {
                     } else {
                         greska('Nije pronađen include fajl.', $include_file);
                     }
-                    str_replace('{!' . $inc . '!}', $include, $value);
+                    $blocks[$key] = str_replace('{!' . $inc . '!}', $include, $value);
                 }
             }
         }

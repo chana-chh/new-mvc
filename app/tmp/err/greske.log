@@ -9890,3 +9890,5 @@ Stack trace:
 [09-Jul-2018 15:14:28 Europe/Belgrade] PHP Notice:  Undefined offset: 1 in C:\xampp\htdocs\new-mvc\app\core\View.php on line 65
 [09-Jul-2018 15:14:47 Europe/Belgrade] PHP Notice:  Undefined offset: 1 in C:\xampp\htdocs\new-mvc\app\core\View.php on line 65
 [09-Jul-2018 15:22:03 Europe/Belgrade] PHP Notice:  Undefined offset: 0 in C:\xampp\htdocs\new-mvc\app\core\View.php on line 62
+[09-Jul-2018 21:19:30 Europe/Belgrade] PHP Parse error:  syntax error, unexpected '&' in C:\xampp\htdocs\new-mvc\app\core\View.php on line 75
+[09-Jul-2018 21:21:12 Europe/Belgrade] PHP Warning:  Illegal string offset ' ASIDE ' in C:\xampp\htdocs\new-mvc\app\core\View.php on line 75

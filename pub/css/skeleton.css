@@ -3,7 +3,7 @@
 .container {
     position: relative;
     width: 100%;
-    max-width: 1140px;
+    max-width: 1600px;
     margin: 0 auto;
     padding: 0 20px;
     box-sizing: border-box;}
@@ -350,11 +350,13 @@ code {
     padding: .2rem .5rem;
     margin: 0 .2rem;
     font-size: 90%;
+    font-family: monospace;
     white-space: nowrap;
-    background: #eeeeee;
+    background: #ddd;
     border: 1px solid #dddddd;
     border-radius: 4px; }
 pre > code {
+    font-size: 14px;
     display: block;
     padding: 1rem 1.5rem;
     white-space: pre; }
