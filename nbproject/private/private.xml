@@ -3,12 +3,10 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/xampp/htdocs/new-mvc/README.md</file>
-            <file>file:/C:/xampp/htdocs/new-mvc/app/views/sql/pocetna.php</file>
-            <file>file:/C:/xampp/htdocs/new-mvc/app/models/CountryModel.php</file>
-            <file>file:/C:/xampp/htdocs/new-mvc/app/core/Model.php</file>
-            <file>file:/C:/xampp/htdocs/new-mvc/app/controllers/SqlController.php</file>
-            <file>file:/C:/xampp/htdocs/new-mvc/app/models/CityModel.php</file>
+            <file>file:/C:/xampp/htdocs/new-mvc/app/views/home/pocetna.php</file>
+            <file>file:/C:/xampp/htdocs/new-mvc/app/routes.php</file>
+            <file>file:/C:/xampp/htdocs/new-mvc/app/controllers/StatickeStraniceController.php</file>
+            <file>file:/C:/xampp/htdocs/new-mvc/app/tmp/SQL.sql</file>
         </group>
     </open-files>
 </project-private>
