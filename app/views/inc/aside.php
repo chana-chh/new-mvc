@@ -8,7 +8,7 @@
                 SQL Statements
                 <ul>
                     <li class="list-link"><a href="<?= $this->app->router->generate('get.statements.select') ?>">SELECT</a></li>
-                    <li class="list-link"><a href="">INSERT</a></li>
+                    <li class="list-link"><a href="<?= $this->app->router->generate('get.statements.insert') ?>">INSERT</a></li>
                     <li class="list-link"><a href="">REPLACE</a></li>
                     <li class="list-link"><a href="">UPDATE</a></li>
                     <li class="list-link"><a href="">DELETE</a></li>

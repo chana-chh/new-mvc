@@ -10,4 +10,8 @@ class StatickeStraniceController extends Controller {
         $this->view->render('statements/select');
     }
 
+    public function statementsInsert() {
+        $this->view->render('statements/insert');
+    }
+
 }

@@ -1,13 +1,21 @@
 html {
-    background-color: #eee;
+    background-color: #ccc;
 }
 
 header, footer {
-    background-color: #ccc;
+    background-color: #000;
     padding: 1rem;
+    color: #ccc;
+}
+
+header a {
+    font-size: 18px;
+    color: #ccc;
+    text-decoration: none;
 }
 
 .logo {
+    font-size: 56px;
     color: orangered;
     text-decoration: none;
 }
