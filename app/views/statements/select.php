@@ -2,6 +2,8 @@
 
 {{ CONTENT BEGIN }}
 <h3>SELECT</h3>
+<a href="https://mariadb.com/kb/en/library/select/" target="_blank">MariaDB SELECT</a> |
+<a href="http://www.mysqltutorial.org/mysql-select-statement-query-data.aspx" target="_blank">MySQL Tutorial SELECT</a>
 <pre><code>SELECT
     [ALL | DISTINCT | DISTINCTROW]
     [HIGH_PRIORITY]
@@ -144,6 +146,10 @@ FROM prodaja_knjiga GROUP BY zemlja, godina, zanr WITH ROLLUP;
 SELECT zemlja, godina, zanr, SUM(prodato)
 FROM prodaja_knjiga GROUP BY zemlja, godina DESC, zanr WITH ROLLUP;
 </code></pre>
+<p>
+    <code>[HAVING where_condition]</code><br>
+    koristi se za filtriranje sumarnih informacija. HAVING se pokrece posle GROUP BY i omogucava filtriranje sumarnih podataka koji nisu dostupni WHERE izrazu.
+</p>
 {{ CONTENT END }}
 
 {{ ASIDE BEGIN }}

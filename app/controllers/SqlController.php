@@ -1,10 +1,8 @@
 <?php
 
-class SqlController extends Controller
-{
+class SqlController extends Controller {
 
-    public function sqlTest(int $page)
-    {
+    public function sqlTest() {
         $this->view->render('sql/pocetna');
     }
 

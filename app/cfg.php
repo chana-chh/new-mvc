@@ -41,7 +41,7 @@ $AUTOLOAD = [
     'app/controllers/',
     'app/orm/',
     'app/models/',
-    'app/libs/',
+    'app/librarys/',
     'app/helpers/',
 ];
 define('AUTOLOAD', serialize($AUTOLOAD));

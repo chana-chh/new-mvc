@@ -1,7 +1,7 @@
 <?php
 
-abstract class Model
-{
+abstract class Model {
+
     /**
      * Baza podataka
      * @var Db PDO instanca
@@ -26,19 +26,16 @@ abstract class Model
      */
     protected $model;
 
-    public function __construct()
-    {
+    public function __construct() {
         $this->db = App::instance()->db;
         $this->model = get_class($this);
     }
 
-    public function getTable()
-    {
+    public function getTable() {
         return $this->table;
     }
 
-    public function getPrimaryKey()
-    {
+    public function getPrimaryKey() {
         return $this->pk;
     }
 
@@ -48,19 +45,16 @@ abstract class Model
      * @param array $params Niz parametara za parametrizovani upit
      * @return Model Niz modela sa podacima iz baze
      */
-    public function query($sql, $params = null)
-    {
+    public function query($sql, $params = null) {
         return $this->db->sel($sql, $params, $this->model);
     }
 
-    public function foundRows()
-    {
+    public function foundRows() {
         $count = $this->query("SELECT FOUND_ROWS() AS count;");
         return (int) $count[0]->count;
     }
 
-    public function selectAll($sort_column = null, $sort = 'ASC')
-    {
+    public function selectAll($sort_column = null, $sort = 'ASC') {
         $order_by = '';
         if ($sort_column) {
             $order_by = " ORDER BY `{$sort_column}` {$sort}";
@@ -69,15 +63,13 @@ abstract class Model
         return $this->db->sel($sql, null, $this->model);
     }
 
-    public function selectId(int $id)
-    {
+    public function selectId(int $id) {
         $sql = "SELECT * FROM `{$this->table}` WHERE `{$this->pk}` = :id;";
         $params = [':id' => $id];
         return $this->db->sel($sql, $params, $this->model);
     }
 
-    public function insert($data)
-    {
+    public function insert($data) {
         $cols = array_column($data, 0);
         $pars = array_map(function($col) {
             return ':' . $col;
@@ -90,8 +82,7 @@ abstract class Model
         return $this->db->qry($sql, $params);
     }
 
-    public function update($data, $where)
-    {
+    public function update($data, $where) {
         list($column, $operator, $value) = $where;
         $cols = array_column($data, 0);
         $pars = array_map(function($col) {
@@ -111,50 +102,42 @@ abstract class Model
         return $this->db->qry($sql, $params);
     }
 
-    public function delete($where)
-    {
+    public function delete($where) {
         list($column, $operator, $value) = $where;
         $sql = "DELETE FROM `{$this->table}` WHERE `{$column}` {$operator} :where_{$column};";
         $params = [":where_{$column}" => $value];
         return $this->db->qry($sql, $params);
     }
 
-    public function deleteId(int $id)
-    {
+    public function deleteId(int $id) {
         $sql = "DELETE FROM `{$this->table}` WHERE `{$this->pk}` = :id";
         $params = [':id' => $id];
         return $this->db->qry($sql, $params);
     }
 
-    public function lastId()
-    {
+    public function lastId() {
         return $this->db->lastId();
     }
 
-    public function lastCount()
-    {
+    public function lastCount() {
         return $this->db->lastCount();
     }
 
-    public function lastError()
-    {
+    public function lastError() {
         return $this->db->lastError();
     }
 
-    public function lastQuery()
-    {
+    public function lastQuery() {
         return $this->db->lastQuery();
     }
 
-    public function lastSql()
-    {
+    public function lastSql() {
         $length = (int) getStringBetween($this->db->lastQuery(), 'SQL: [', ']');
         $start = strlen('SQL: [' . $length . '] ');
         return substr($this->db->lastQuery(), $start, $length);
     }
 
-    public function enumOrSetList($column)
-    {
+    public function enumOrSetList($column) {
         $sql = "SELECT DATA_TYPE, COLUMN_TYPE FROM INFORMATION_SCHEMA.COLUMNS WHERE `TABLE_NAME` = :table AND `COLUMN_NAME` = :column;";
         $params = [':table' => $this->table, ':column' => $column];
         $result = $this->db->sel($sql, $params);
@@ -168,15 +151,13 @@ abstract class Model
         }
     }
 
-    public function pagination($page, $perpage, $span, $sql, $params = null)
-    {
+    public function pagination($page, $perpage, $span, $sql, $params = null) {
         $data = $this->pageData($page, $perpage, $sql, $params);
         $links = $this->pageLinks($page, $perpage, $span);
         return ['data' => $data, 'links' => $links];
     }
 
-    public function pageData($page, $perpage, $sql, $params = null)
-    {
+    public function pageData($page, $perpage, $sql, $params = null) {
         $sql = str_replace('SELECT', 'SELECT SQL_CALC_FOUND_ROWS', $sql);
         $start = ($page - 1) * $perpage;
         $limit = $perpage;
@@ -187,8 +168,7 @@ abstract class Model
         return $data;
     }
 
-    public function pageLinks($page, $perpage, $span)
-    {
+    public function pageLinks($page, $perpage, $span) {
         $count = $this->foundRows();
         $url = App::instance()->router->getCurrentUriName();
         $pages = (int) ceil($count / $perpage);
@@ -228,35 +208,68 @@ abstract class Model
     }
 
     /**
+     * Jedan prema jedan (Jedan)
+     * <strong>Primer</strong><br>
+     * Korisnik moze da ima samo jedan DodatniPodatak.
+     * U tabeli dodatni_podaci imamo `korisnik_id` FK koji povezuje ovu tabelu sa tabelom `korisnici`.
+     * U modelu Korsnik imamo dodatni_podatak(){return hasOne('DodatniPodatak', 'korisnik_id');}
+     * @param type $model_class Model klasa koja sadrzi povezane podatke
+     * @param type $fk Strani kljuc koji povezuje tabelu povezanog modela sa tabelom trenutnog modela
+     * @return type
+     */
+    public function hasOne($model_class, $fk) {
+        $m = new $model_class();
+        $sql = "SELECT * FROM `{$m->getTable()}` WHERE `{$fk}` = :fk;";
+        $pk = $this->getPrimaryKey();
+        $params = [':fk' => $this->$pk];
+        $result = $this->db->sel($sql, $params, $model_class);
+        return $result[0];
+    }
+
+    /**
+     * Jedan prema jedan (jedan)
+     * <strong>Primer</strong><br>
+     * DodatniPodatak pripada samo jednom Korisnik-u.
+     * U tabeli dodatni_podaci imamo `korisnik_id` FK koji povezuje ovu tabelu sa tabelom `korisnici`.
+     * U modelu DodatniPodatak imamo korisnik(){return belongsTo('Korisnik', 'korisnik_id');}
      * Jedan prema vise (jedan)
-     * @param string $f_model_class Model klasa koja sadrzi povezane podatke
+     * <strong>Primer</strong><br>
+     * Korisnik moze da (pripada) ima samo jednu Uloga.
+     * U tabeli `uloge` imamo 'korisnik_id' FK koji povezuje ovu tabelu sa tabelom korisnici
+     * U modelu Korisnik imamo uloga(){return belongsTo('Uloga', 'korisnik_id');};
+     * @param string $model_class Model klasa koja sadrzi povezane podatke
      * @param string $fk Strani kljuc koji povezuje tabelu trenutnog modela sa tabelom povezanog modela
      * @return Model
      */
-    public function belongsTo($f_model_class, $fk)
-    {
-        $m = new $f_model_class();
+    public function belongsTo($model_class, $fk) {
+        $m = new $model_class();
         $sql = "SELECT * FROM `{$m->getTable()}` WHERE `{$m->getPrimaryKey()}` = :fk;";
         $params = [':fk' => $this->$fk];
-        $result = $this->db->sel($sql, $params, $f_model_class);
+        $result = $this->db->sel($sql, $params, $model_class);
         return $result[0];
     }
 
     /**
      * Jedan prema vise (vise)
+     * <strong>Primer</strong><br>
+     * Uloga moze da ima vise Korisnik-a.
+     * U tabeli `uloge` imamo 'korisnik_id' FK koji povezuje ovu tabelu sa tabelom korisnici
+     * U modelu Uloga imamo korisnici(){return hasMany('Uloga', 'korisnik_id');}
      * @param type $f_model_class Model klasa koja sadrzi povezane podatke
      * @param type $fk Strani kljuc koji povezuje tabelu povezanog modela sa tabelom trenutnog modela
      * @return array Niz Model-a
      */
-    public function hasMany($f_model_class, $fk)
-    {
+    public function hasMany($f_model_class, $fk) {
         $m = new $f_model_class();
         $sql = "SELECT * FROM `{$m->getTable()}` WHERE `{$fk}` = :pk;";
-        //$sql = "SELECT * FROM `city` WHERE `country_id` = :fk;";
         $pk = $this->getPrimaryKey();
         $params = [':pk' => $this->$pk];
         $result = $this->db->sel($sql, $params, $f_model_class);
         return $result;
+    }
+
+    public function belongsToMany($model_class, $pivot_table, $pt_this_table_fk, $pt_foreign_table_fk) {
+        
     }
 
 }

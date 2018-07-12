@@ -9892,3 +9892,10 @@ Stack trace:
 [09-Jul-2018 15:22:03 Europe/Belgrade] PHP Notice:  Undefined offset: 0 in C:\xampp\htdocs\new-mvc\app\core\View.php on line 62
 [09-Jul-2018 21:19:30 Europe/Belgrade] PHP Parse error:  syntax error, unexpected '&' in C:\xampp\htdocs\new-mvc\app\core\View.php on line 75
 [09-Jul-2018 21:21:12 Europe/Belgrade] PHP Warning:  Illegal string offset ' ASIDE ' in C:\xampp\htdocs\new-mvc\app\core\View.php on line 75
+[12-Jul-2018 09:38:45 Europe/Belgrade] PHP Fatal error:  Uncaught ArgumentCountError: Too few arguments to function SqlController::sqlTest(), 0 passed in C:\xampp\htdocs\new-mvc\app\core\App.php on line 124 and exactly 1 expected in C:\xampp\htdocs\new-mvc\app\controllers\SqlController.php:6
+Stack trace:
+#0 C:\xampp\htdocs\new-mvc\app\core\App.php(124): SqlController->sqlTest()
+#1 C:\xampp\htdocs\new-mvc\app\core\App.php(99): App->dispatch(Array)
+#2 C:\xampp\htdocs\new-mvc\pub\index.php(17): App->run()
+#3 {main}
+  thrown in C:\xampp\htdocs\new-mvc\app\controllers\SqlController.php on line 6

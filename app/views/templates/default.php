@@ -16,6 +16,7 @@
             <header>
                 <h1><a href="<?= $this->app->router->generate('get.pocetna') ?>" class="logo"><?= isset($naslov) ?: APP_NAME; ?></a></h1>
                 <a href="<?= $this->app->router->generate('get.pocetna') ?>">Home</a> |
+                <a href="<?= $this->app->router->generate('get.sql.test') ?>">SQL test</a> |
                 <a href="https://mariadb.com/kb/en/" target="_blank">MariaDB</a> |
                 <a href="http://www.mysqltutorial.org/" target="_blank">MySQL Tutorial</a> |
             </header>
