@@ -77,7 +77,7 @@ ini_set('error_log', realpath(dirname(__DIR__)) . DIRECTORY_SEPARATOR
         . 'app' . DIRECTORY_SEPARATOR
         . 'tmp' . DIRECTORY_SEPARATOR
         . 'err' . DIRECTORY_SEPARATOR
-        . 'greske.log');
+        . 'errors.log');
 
 // Globalna podesavanja
 ini_set('default_charset', 'UTF-8');
