@@ -6,4 +6,5 @@ $routes = [
     ['GET', '/statements/insert', 'StatickeStraniceController#statementsInsert', 'get.statements.insert'],
     /* ==================================================================================================== */
     ['GET', '/sql/test', 'SqlController#sqlTest', 'get.sql.test'],
+    ['POST', '/sql/test', 'SqlController#sqlTestPOst', 'post.sql.test'],
 ];

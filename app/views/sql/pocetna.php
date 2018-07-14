@@ -3,7 +3,19 @@
 {{ CONTENT BEGIN }}
 <h3>SQL test strana</h3>
 <hr>
-<?= $csrf ?>
+
+<form action="" method="POST">
+    <?= $csrf ?>
+    <input type="text" name="korisnik">
+    <input type="submit" name="submit" value="Submit">
+</form>
+
+{{ CONTENT END }}
+
+{{ ASIDE BEGIN }}
+{! ASIDE !}
+{{ ASIDE END }}
+
 <?php $start = microtime(true); ?>
 <ul>
     <?php foreach ($data as $d) : ?>
@@ -17,9 +29,3 @@
     <?php endforeach; ?>
 </ul>
 <?php echo 'Vreme: ' . (microtime(true) - $start) . ' sec'; ?>
-
-{{ CONTENT END }}
-
-{{ ASIDE BEGIN }}
-{! ASIDE !}
-{{ ASIDE END }}

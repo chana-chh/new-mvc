@@ -1,7 +1,6 @@
 <?php
 
-class App
-{
+class App {
     // Putanje za automatsko ucitavanje klasa
     private $autoload_dirs = [];
     // Putanje aplikacije
@@ -11,36 +10,30 @@ class App
     // Instanca klase za singlton
     private static $inst = null;
 
-    public static function instance()
-    {
+    public static function instance() {
         if (self::$inst === null) {
             self::$inst = new App();
         }
         return self::$inst;
     }
 
-    private function __clone()
-    {
+    private function __clone() {
 
     }
 
-    public function setDic(DiC $dic)
-    {
+    public function setDic(DiC $dic) {
         $this->dic = $dic;
     }
 
-    public function __get($name)
-    {
+    public function __get($name) {
         return $this->dic->$name;
     }
 
-    public function get($name, $new = false)
-    {
+    public function get($name, $new = false) {
         return $this->dic->get($name, $new);
     }
 
-    private function __construct()
-    {
+    private function __construct() {
         $server = filter_input_array(INPUT_SERVER, FILTER_SANITIZE_STRING);
         define('SERVER', $server);
         $scheme = isset(SERVER['REQUEST_SCHEME']) ? SERVER['REQUEST_SCHEME'] : 'http';
@@ -77,8 +70,7 @@ class App
         }
     }
 
-    private function autoload($class_name)
-    {
+    private function autoload($class_name) {
         $class = trim($class_name);
 
         foreach ($this->autoload_dirs as $dir) {
@@ -92,22 +84,20 @@ class App
         greska('Nije pronađena klasa: ', $class_name);
     }
 
-    public function run()
-    {
+    public function run() {
         $this->router->addRoutes($this->app_routes);
         $route = $this->router->match();
         $this->dispatch($route);
     }
 
-    private function dispatch($route)
-    {
+    private function dispatch($route) {
         $request_params = [];
         if (!empty($route['params'])) {
             // Preuzimanje parametara iz GET zahteva
-            $request_params = $this->sanitize($route['params']);
+            $request_params = sanitize($route['params']);
         } elseif ($route['method'] === 'POST') {
             // Preuzimanje parametara iz POST zahteva
-            $request_params = [filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING)];
+            $request_params = [filter_input_array(INPUT_POST, FILTER_UNSAFE_RAW, FILTER_FLAG_STRIP_LOW)];
         }
 
         if (class_exists($route['controller'])) {
@@ -125,8 +115,7 @@ class App
         call_user_func_array([$controller, 'after'], []);
     }
 
-    public function sanitize($param)
-    {
+    public function sanitize($param) {
         if (!is_array($param)) {
             $param = filter_var(urldecode($param), FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_LOW | FILTER_FLAG_STRIP_HIGH);
         } else {
