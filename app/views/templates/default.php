@@ -2,6 +2,7 @@
 <html lang="sr">
     <head>
         <meta charset="utf-8">
+        <?= $csrf_meta ?>
         <title><?= isset($naziv) ?: APP_NAME; ?></title>
         <link rel="stylesheet" type="text/css" href="<?= URL . '/css/normalize.css'; ?>">
         <link rel="stylesheet" type="text/css" href="<?= URL . '/css/skeleton.css'; ?>">

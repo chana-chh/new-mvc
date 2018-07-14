@@ -1,22 +1,21 @@
 <?php
 
-class View
-{
+class View {
     private $app;
 
-    public function __construct()
-    {
+    public function __construct() {
         $this->app = App::instance();
     }
 
-    public function render($view_path, $data = [])
-    {
+    public function render($view_path, $data = []) {
         // sadrzaj view fajla
         $content = '';
         // sadrzaj template fajla
         $template = '';
 
         // preuzimanje promenjivih
+        $data['csrf_meta'] = $this->app->csrf->metaTag();
+        $data['csrf'] = $this->app->csrf->inputTag();
         extract($data);
 
         // puna putanja do view fajla

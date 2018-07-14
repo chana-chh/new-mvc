@@ -3,6 +3,7 @@
 {{ CONTENT BEGIN }}
 <h3>SQL test strana</h3>
 <hr>
+<?= $csrf ?>
 <?php $start = microtime(true); ?>
 <ul>
     <?php foreach ($data as $d) : ?>

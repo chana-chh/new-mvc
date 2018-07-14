@@ -17,3 +17,4 @@ $dic = new DiC();
 $dic->set('router', 'Router');
 $dic->set('view', 'View');
 $dic->set('db', 'Db');
+$dic->set('csrf', 'Csrf');

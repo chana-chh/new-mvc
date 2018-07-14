@@ -52,7 +52,7 @@ function sanitize($param) {
             return filter_var($param, FILTER_UNSAFE_RAW, FILTER_FLAG_STRIP_LOW);
         case 'array':
             foreach ($param as $key => $value) {
-                $param[$key] = self::sanitize($value);
+                $param[$key] = sanitize($value);
             }
             return $param;
         case 'object':
