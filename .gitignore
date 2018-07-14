@@ -1,4 +1,3 @@
 /nbproject/
-/app/tmp/err/*
-/app/tmp/ses/*
-/app/tmp/*.*
+/app/tmp/err
+/app/tmp/ses
