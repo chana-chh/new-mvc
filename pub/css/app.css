@@ -5,19 +5,27 @@ html {
 header, footer {
     background-color: #000;
     padding: 1rem;
-    color: #ccc;
+    color: #45d40c;
+    font-size: 20px;
 }
 
 header a {
     font-size: 18px;
-    color: #ccc;
+    color: #45d40c;
     text-decoration: none;
+}
+
+header a:hover {
+    color: #ccc;
 }
 
 .logo {
     font-size: 56px;
     color: orangered;
     text-decoration: none;
+}
+.logo:hover {
+    color: orange;
 }
 
 .list-title{

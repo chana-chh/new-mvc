@@ -25,6 +25,12 @@ abstract class Model {
      */
     protected $model;
 
+    /**
+     * Lista za eager loading
+     * @var array
+     */
+    protected $eager = [];
+
     public function __construct() {
         $this->db = App::instance()->db;
         $this->model = get_class($this);
@@ -51,6 +57,10 @@ abstract class Model {
     public function foundRows() {
         $count = $this->query("SELECT FOUND_ROWS() AS count;");
         return (int) $count[0]->count;
+    }
+
+    public function select($sql, $params = null) {
+        
     }
 
     public function selectAll($sort_column = null, $sort = 'ASC') {
@@ -285,6 +295,10 @@ abstract class Model {
         $sql = "SELECT `{$tbl}`.* FROM `{$tbl}` JOIN `{$pivot_table}` ON `{$tbl}`.`{$m->getPrimaryKey()}` = `{$pivot_table}`.`{$pt_foreign_table_fk}` WHERE `{$pivot_table}`.`{$pt_this_table_fk}` = :pk;";
         $result = $this->db->sel($sql, $params, $model_class);
         return $result;
+    }
+
+    public function with($relations) {
+
     }
 
 }
