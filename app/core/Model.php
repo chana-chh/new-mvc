@@ -1,7 +1,6 @@
 <?php
 
 abstract class Model {
-
     /**
      * Baza podataka
      * @var Db PDO instanca
@@ -42,8 +41,8 @@ abstract class Model {
     /**
      * Sirovi sql upit
      * @param string $sql SQL upit
-     * @param array $params Niz parametara za parametrizovani upit
-     * @return Model Niz modela sa podacima iz baze
+     * @param array $params Niz parametara za PDO parametrizovani upit
+     * @return array Niz Model-a
      */
     public function query($sql, $params = null) {
         return $this->db->sel($sql, $params, $this->model);
@@ -66,7 +65,7 @@ abstract class Model {
     public function selectId(int $id) {
         $sql = "SELECT * FROM `{$this->table}` WHERE `{$this->pk}` = :id;";
         $params = [':id' => $id];
-        return $this->db->sel($sql, $params, $this->model);
+        return $this->db->sel($sql, $params, $this->model)[0];
     }
 
     public function insert($data) {
@@ -82,6 +81,7 @@ abstract class Model {
         return $this->db->qry($sql, $params);
     }
 
+    // TODO DODATI PARAMS, a WHERE da bude string
     public function update($data, $where) {
         list($column, $operator, $value) = $where;
         $cols = array_column($data, 0);
@@ -102,6 +102,7 @@ abstract class Model {
         return $this->db->qry($sql, $params);
     }
 
+    // TODO DODATI PARAMS, a WHERE da bude string
     public function delete($where) {
         list($column, $operator, $value) = $where;
         $sql = "DELETE FROM `{$this->table}` WHERE `{$column}` {$operator} :where_{$column};";
@@ -213,9 +214,9 @@ abstract class Model {
      * Korisnik moze da ima samo jedan DodatniPodatak.
      * U tabeli dodatni_podaci imamo `korisnik_id` FK koji povezuje ovu tabelu sa tabelom `korisnici`.
      * U modelu Korsnik imamo dodatni_podatak(){return hasOne('DodatniPodatak', 'korisnik_id');}
-     * @param type $model_class Model klasa koja sadrzi povezane podatke
-     * @param type $fk Strani kljuc koji povezuje tabelu povezanog modela sa tabelom trenutnog modela
-     * @return type
+     * @param string $model_class Model klasa koja sadrzi povezane podatke
+     * @param string $fk Strani kljuc koji povezuje tabelu povezanog modela sa tabelom trenutnog modela
+     * @return Model
      */
     public function hasOne($model_class, $fk) {
         $m = new $model_class();
@@ -255,21 +256,35 @@ abstract class Model {
      * Uloga moze da ima vise Korisnik-a.
      * U tabeli `uloge` imamo 'korisnik_id' FK koji povezuje ovu tabelu sa tabelom korisnici
      * U modelu Uloga imamo korisnici(){return hasMany('Uloga', 'korisnik_id');}
-     * @param type $f_model_class Model klasa koja sadrzi povezane podatke
-     * @param type $fk Strani kljuc koji povezuje tabelu povezanog modela sa tabelom trenutnog modela
+     * @param string $model_class Model klasa koja sadrzi povezane podatke
+     * @param string $fk Strani kljuc koji povezuje tabelu povezanog modela sa tabelom trenutnog modela
      * @return array Niz Model-a
      */
-    public function hasMany($f_model_class, $fk) {
-        $m = new $f_model_class();
+    public function hasMany($model_class, $fk) {
+        $m = new $model_class();
         $sql = "SELECT * FROM `{$m->getTable()}` WHERE `{$fk}` = :pk;";
         $pk = $this->getPrimaryKey();
         $params = [':pk' => $this->$pk];
-        $result = $this->db->sel($sql, $params, $f_model_class);
+        $result = $this->db->sel($sql, $params, $model_class);
         return $result;
     }
 
+    /**
+     * Vise prema vise
+     * @param string $model_class Model klasa koja sadrzi povezane podatke
+     * @param string $pivot_table Medjutabela koja povezuje tabelu ovog modela i tabelu povezanog modela
+     * @param string $pt_this_table_fk FK na ovu tabelu u medjutabeli
+     * @param string $pt_foreign_table_fk FK na povezanu tabelu u medjutabeli
+     * @return array Niz Model-a
+     */
     public function belongsToMany($model_class, $pivot_table, $pt_this_table_fk, $pt_foreign_table_fk) {
-        
+        $m = new $model_class();
+        $tbl = $m->getTable();
+        $pk = $this->getPrimaryKey();
+        $params = [':pk' => $this->$pk];
+        $sql = "SELECT `{$tbl}`.* FROM `{$tbl}` JOIN `{$pivot_table}` ON `{$tbl}`.`{$m->getPrimaryKey()}` = `{$pivot_table}`.`{$pt_foreign_table_fk}` WHERE `{$pivot_table}`.`{$pt_this_table_fk}` = :pk;";
+        $result = $this->db->sel($sql, $params, $model_class);
+        return $result;
     }
 
 }
