@@ -301,6 +301,7 @@ abstract class Model {
         /*
          * Parametri kao za relacije
          * kako ovo izvuci samo iz imena ???
+         * ime treba da bude ime relacije
          * ['naziv_koji_ce_se_pozivati', 'vrsta_belongsToMany', 'NazivModela', 'pivot_table', 'pt_this_table_fk', 'pt_foreign_table_fk']
          */
         if (is_array($with) && !empty($with)) {
