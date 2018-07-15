@@ -24,12 +24,8 @@ abstract class Model {
      * @var string Model klasa koja sadrzi podatke za jedan zapis iz baze podataka
      */
     protected $model;
-
-    /**
-     * Lista za eager loading
-     * @var array
-     */
-    protected $eager = [];
+    private $with = [];
+    public $eagers = [];
 
     public function __construct() {
         $this->db = App::instance()->db;
@@ -45,22 +41,22 @@ abstract class Model {
     }
 
     /**
-     * Sirovi sql upit
+     * Sirovi sql za upite koji ne vracaju zapise iz baze
      * @param string $sql SQL upit
      * @param array $params Niz parametara za PDO parametrizovani upit
      * @return array Niz Model-a
      */
     public function query($sql, $params = null) {
+        return $this->db->qry($sql, $params, $this->model);
+    }
+
+    public function select($sql, $params = null) {
         return $this->db->sel($sql, $params, $this->model);
     }
 
     public function foundRows() {
         $count = $this->query("SELECT FOUND_ROWS() AS count;");
         return (int) $count[0]->count;
-    }
-
-    public function select($sql, $params = null) {
-        
     }
 
     public function selectAll($sort_column = null, $sort = 'ASC') {
@@ -225,12 +221,12 @@ abstract class Model {
      * U tabeli dodatni_podaci imamo `korisnik_id` FK koji povezuje ovu tabelu sa tabelom `korisnici`.
      * U modelu Korsnik imamo dodatni_podatak(){return hasOne('DodatniPodatak', 'korisnik_id');}
      * @param string $model_class Model klasa koja sadrzi povezane podatke
-     * @param string $fk Strani kljuc koji povezuje tabelu povezanog modela sa tabelom trenutnog modela
+     * @param string $roreign_table_fk Strani kljuc koji povezuje tabelu povezanog modela sa tabelom trenutnog modela
      * @return Model
      */
-    public function hasOne($model_class, $fk) {
+    public function hasOne($model_class, $roreign_table_fk) {
         $m = new $model_class();
-        $sql = "SELECT * FROM `{$m->getTable()}` WHERE `{$fk}` = :fk;";
+        $sql = "SELECT * FROM `{$m->getTable()}` WHERE `{$roreign_table_fk}` = :fk;";
         $pk = $this->getPrimaryKey();
         $params = [':fk' => $this->$pk];
         $result = $this->db->sel($sql, $params, $model_class);
@@ -249,13 +245,13 @@ abstract class Model {
      * U tabeli `uloge` imamo 'korisnik_id' FK koji povezuje ovu tabelu sa tabelom korisnici
      * U modelu Korisnik imamo uloga(){return belongsTo('Uloga', 'korisnik_id');};
      * @param string $model_class Model klasa koja sadrzi povezane podatke
-     * @param string $fk Strani kljuc koji povezuje tabelu trenutnog modela sa tabelom povezanog modela
+     * @param string $this_table_fk Strani kljuc koji povezuje tabelu trenutnog modela sa tabelom povezanog modela
      * @return Model
      */
-    public function belongsTo($model_class, $fk) {
+    public function belongsTo($model_class, $this_table_fk) {
         $m = new $model_class();
         $sql = "SELECT * FROM `{$m->getTable()}` WHERE `{$m->getPrimaryKey()}` = :fk;";
-        $params = [':fk' => $this->$fk];
+        $params = [':fk' => $this->$this_table_fk];
         $result = $this->db->sel($sql, $params, $model_class);
         return $result[0];
     }
@@ -267,12 +263,12 @@ abstract class Model {
      * U tabeli `uloge` imamo 'korisnik_id' FK koji povezuje ovu tabelu sa tabelom korisnici
      * U modelu Uloga imamo korisnici(){return hasMany('Uloga', 'korisnik_id');}
      * @param string $model_class Model klasa koja sadrzi povezane podatke
-     * @param string $fk Strani kljuc koji povezuje tabelu povezanog modela sa tabelom trenutnog modela
+     * @param string $foreign_table_fk Strani kljuc koji povezuje tabelu povezanog modela sa tabelom trenutnog modela
      * @return array Niz Model-a
      */
-    public function hasMany($model_class, $fk) {
+    public function hasMany($model_class, $foreign_table_fk) {
         $m = new $model_class();
-        $sql = "SELECT * FROM `{$m->getTable()}` WHERE `{$fk}` = :pk;";
+        $sql = "SELECT * FROM `{$m->getTable()}` WHERE `{$foreign_table_fk}` = :pk;";
         $pk = $this->getPrimaryKey();
         $params = [':pk' => $this->$pk];
         $result = $this->db->sel($sql, $params, $model_class);
@@ -297,8 +293,48 @@ abstract class Model {
         return $result;
     }
 
-    public function with($relations) {
+    /*
+     * EAGER LOADING
+     */
 
+    public function with($with) {
+        /*
+         * Parametri kao za relacije
+         * kako ovo izvuci samo iz imena ???
+         * ['naziv_koji_ce_se_pozivati', 'vrsta_belongsToMany', 'NazivModela', 'pivot_table', 'pt_this_table_fk', 'pt_foreign_table_fk']
+         */
+        if (is_array($with) && !empty($with)) {
+            foreach ($with as $w) {
+                $this->with[] = $w;
+            }
+            return $this;
+        } else {
+            greska('Metodi za eager loading nije prosledjen parametar u obliku niza.');
+        }
+    }
+
+    public function selectAll1($sql, $params = null) {
+
+        $sql = "SELECT * FROM `{$this->table}`;";
+        $result = $this->db->sel($sql, null, $this->model);
+
+        $ids = [];
+        foreach ($result as $r) {
+            $ids[] = (int) $result[$this->pk];
+        }
+        $ids = implode(',', $ids);
+
+        $grouped = [];
+        $sql1 = "";
+        $all = $this->db->sel($sql1, null, $eager_model);
+        foreach ($all as $one) {
+            $grouped[$one['eager_model_fk_to_this_model']][] = $one;
+        }
+        $pk = $this->pk;
+        foreach ($result as $r) {
+            $this->eagers['eager_naziv'] = $grouped[$this->$pk];
+        }
+        return $result;
     }
 
 }
