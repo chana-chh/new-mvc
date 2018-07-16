@@ -13,12 +13,7 @@ class SqlController extends Controller {
     }
 
     public function sqlTestPost($request) {
-
-        if ($this->app->csrf->isValid($request['csrf_token'])) {
-            echo e($request['korisnik']);
-        } else {
-            greska('CSRF');
-        }
+        echo e($request['korisnik']);
     }
 
 }

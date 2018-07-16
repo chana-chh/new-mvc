@@ -5,6 +5,10 @@ class App {
     private $autoload_dirs = [];
     // Putanje aplikacije
     private $app_routes = [];
+    // Trenutna putanja
+    private $route = [];
+    // Trenutni parametri
+    private $params;
     // Dependency injection container
     private $dic;
     // Instanca klase za singlton
@@ -110,20 +114,21 @@ class App {
             greska('U kontroleru <code>' . $route['controller'] . '</code> nije pronađena metoda', $route['action']);
         }
 
+        $this->route = $route;
+        $this->params = isset($request_params[0]) ? $request_params[0] : [];
+
+        call_user_func_array([$controller, 'csrf'], []);
         call_user_func_array([$controller, 'before'], []);
         call_user_func_array([$controller, $route['action']], $request_params);
         call_user_func_array([$controller, 'after'], []);
     }
 
-    public function sanitize($param) {
-        if (!is_array($param)) {
-            $param = filter_var(urldecode($param), FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_LOW | FILTER_FLAG_STRIP_HIGH);
-        } else {
-            foreach ($param as $p) {
-                $this->sanitize($p);
-            }
-        }
-        return $param;
+    public function getRouteMethod() {
+        return $this->route['method'];
+    }
+
+    public function getRequestParams() {
+        return $this->params;
     }
 
 }
