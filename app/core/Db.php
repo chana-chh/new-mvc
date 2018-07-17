@@ -1,7 +1,7 @@
 <?php
 
-class Db extends PDO
-{
+class Db extends PDO {
+
     // Cuva poslednju PDO gresku
     private $error;
     // Cuva broj redova poslednjeg upita
@@ -9,8 +9,7 @@ class Db extends PDO
     // Poslednji upit
     private $lastQuery;
 
-    public function __construct($dsn = DSN, $user = DB_USER, $pwd = DB_PASS, $attrib = null)
-    {
+    public function __construct($dsn = DSN, $user = DB_USER, $pwd = DB_PASS, $attrib = null) {
         if (!$attrib) {
             $attrib = unserialize(PDO_OPCIJE);
         }
@@ -22,8 +21,7 @@ class Db extends PDO
         }
     }
 
-    public function qry($sql, $params = null)
-    {
+    public function qry($sql, $params = null) {
         try {
             $stmt = $this->prepare($sql);
             if ($params) {
@@ -46,8 +44,7 @@ class Db extends PDO
         return $stmt;
     }
 
-    public function sel($sql, $params = null, $model = null)
-    {
+    public function sel($sql, $params = null, $model = null) {
         try {
             $stmt = $this->qry($sql, $params);
             if ($model) {
@@ -62,8 +59,7 @@ class Db extends PDO
         return $data;
     }
 
-    protected function pdoType($param)
-    {
+    protected function pdoType($param) {
         switch (gettype($param)) {
             case 'NULL':
                 return PDO::PARAM_NULL;
@@ -76,23 +72,19 @@ class Db extends PDO
         }
     }
 
-    public function lastId()
-    {
+    public function lastId() {
         return $this->lastInsertId();
     }
 
-    public function lastCount()
-    {
+    public function lastCount() {
         return $this->count;
     }
 
-    public function lastError()
-    {
+    public function lastError() {
         return $this->error;
     }
 
-    public function lastQuery()
-    {
+    public function lastQuery() {
         return $this->lastQuery;
     }
 

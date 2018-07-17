@@ -1,6 +1,7 @@
 <?php
 
 abstract class Model {
+
     /**
      * Baza podataka
      * @var Db PDO instanca
@@ -75,11 +76,11 @@ abstract class Model {
     }
 
     public function insert($data) {
-        $cols = array_column($data, 0);
-        $pars = array_map(function($col) {
-            return ':' . $col;
-        }, $cols);
-        $vals = array_column($data, 1);
+        foreach ($data as $key => $value) {
+            $cols[] = $key;
+            $pars[] = ':' . $key;
+            $vals[] = $value;
+        }
         $params = array_combine($pars, $vals);
         $c = '`' . implode('`, `', $cols) . '`';
         $v = implode(', ', $pars);
@@ -221,12 +222,12 @@ abstract class Model {
      * U tabeli dodatni_podaci imamo `korisnik_id` FK koji povezuje ovu tabelu sa tabelom `korisnici`.
      * U modelu Korsnik imamo dodatni_podatak(){return hasOne('DodatniPodatak', 'korisnik_id');}
      * @param string $model_class Model klasa koja sadrzi povezane podatke
-     * @param string $roreign_table_fk Strani kljuc koji povezuje tabelu povezanog modela sa tabelom trenutnog modela
+     * @param string $foreign_table_fk Strani kljuc koji povezuje tabelu povezanog modela sa tabelom trenutnog modela
      * @return Model
      */
-    public function hasOne($model_class, $roreign_table_fk) {
+    public function hasOne($model_class, $foreign_table_fk) {
         $m = new $model_class();
-        $sql = "SELECT * FROM `{$m->getTable()}` WHERE `{$roreign_table_fk}` = :fk;";
+        $sql = "SELECT * FROM `{$m->getTable()}` WHERE `{$foreign_table_fk}` = :fk;";
         $pk = $this->getPrimaryKey();
         $params = [':fk' => $this->$pk];
         $result = $this->db->sel($sql, $params, $model_class);
@@ -314,7 +315,7 @@ abstract class Model {
         }
     }
 
-    public function selectAll1($sql, $params = null) {
+    public function eager($sql, $params = null) {
 
         $sql = "SELECT * FROM `{$this->table}`;";
         $result = $this->db->sel($sql, null, $this->model);

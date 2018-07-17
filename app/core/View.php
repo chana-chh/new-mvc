@@ -1,6 +1,7 @@
 <?php
 
 class View {
+
     private $app;
 
     public function __construct() {
@@ -14,14 +15,14 @@ class View {
         $template = '';
 
         // preuzimanje promenjivih
-        $data['csrf_meta'] = $this->app->csrf->metaTag();
-        $data['csrf'] = $this->app->csrf->inputTag();
+        $csrf_meta = $this->app->csrf->metaTag();
+        $csrf = $this->app->csrf->inputTag();
         extract($data);
 
         // puna putanja do view fajla
-        $full_view_path = DIR . 'app/views/' . $view_path . '.php';
+        $full_view_path = DIR . 'app' . DIRECTORY_SEPARATOR . 'views' . DIRECTORY_SEPARATOR . $view_path . '.php';
         // popunjavanje sadrzaja view fajla
-        if (file_exists($full_view_path)) {
+        if ($full_view_path) {
             ob_start();
             require_once $full_view_path;
             $content = ob_get_clean();

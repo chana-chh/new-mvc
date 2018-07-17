@@ -19,7 +19,7 @@ define('DEBUG', true);
 // Baza podataka
 define('DB_TYPE', 'mysql');
 define('DB_HOST', '127.0.0.1');
-define('DB_NAME', 'sakila');
+define('DB_NAME', 'test');
 define('DB_USER', 'root');
 define('DB_PASS', '');
 // Data Source Name
@@ -89,6 +89,8 @@ ini_set('allow_url_include', '0');
 
 // Podesavanje memorije
 ini_set('memory_limit', '512M');
+// Podesavanje vremena izvrsavanja
+ini_set('max_execution_time', 120);
 
 // File upload podesavanja
 ini_set('file_uploads', 0);
