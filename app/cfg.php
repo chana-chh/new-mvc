@@ -90,7 +90,7 @@ ini_set('allow_url_include', '0');
 // Podesavanje memorije
 ini_set('memory_limit', '512M');
 // Podesavanje vremena izvrsavanja
-ini_set('max_execution_time', 120);
+ini_set('max_execution_time', 600);
 
 // File upload podesavanja
 ini_set('file_uploads', 0);

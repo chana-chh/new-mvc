@@ -9,17 +9,13 @@ class View {
     }
 
     public function render($view_path, $data = []) {
-        // sadrzaj view fajla
-        $content = '';
-        // sadrzaj template fajla
-        $template = '';
-
-        // preuzimanje promenjivih
+        // Promenjive za CSRF zastitu
         $csrf_meta = $this->app->csrf->metaTag();
         $csrf = $this->app->csrf->inputTag();
+        // Prosledjivanje promenjivih
         extract($data);
 
-        // puna putanja do view fajla
+        // Puna putanja do view fajla
         $full_view_path = DIR . 'app' . DIRECTORY_SEPARATOR . 'views' . DIRECTORY_SEPARATOR . $view_path . '.php';
         // popunjavanje sadrzaja view fajla
         if ($full_view_path) {
@@ -30,11 +26,11 @@ class View {
             greska('Nije pronađen view fajl.', $full_view_path);
         }
 
-        // trazenje naziva templejta u sadrzaju view fajla
+        // Trazenje naziva templejta u sadrzaju view fajla
         $temp = getStringBetween($content, '{@', '@}');
-        // puna putanja do templejta
+        // Puna putanja do templejta
         $full_template_path = DIR . 'app/views/templates/' . trim(strtolower($temp)) . '.php';
-        // popunjavanje sadrzaja templejta
+        // Popunjavanje sadrzaja templejta
         if (file_exists($full_template_path)) {
             ob_start();
             require_once $full_template_path;
@@ -43,12 +39,15 @@ class View {
             greska('Nije pronađen template fajl.', $full_template_path);
         }
 
-        // trazenje blokova u templejtu
+        // TODO Trazenje i ubacivanje include sadrzaja u tmplejt
+        // Ovo da se pomeri kad je templejt popunjen blokovima pa onda
+        // uraditi include tako da ce da odradi i u templejtu i u blokovima
+        // Trazenje blokova u templejtu
         preg_match_all('#{{(.*)}}#', $template, $pm_template);
-        // niz blokova iz templejta
+        // Niz blokova iz templejta
         $template_blocks = $pm_template[1];
 
-        // trazenje sadrzaja blokova u view fajlu
+        // Trazenje sadrzaja blokova u view fajlu
         $blocks = [];
         foreach ($template_blocks as $block) {
             $block_begin = '{{' . $block . 'BEGIN }}';
@@ -57,6 +56,7 @@ class View {
             $blocks[$block] = $rezultat;
         }
 
+        // Trazenje i ubacivanje include sardzaja u blokove
         foreach ($blocks as $key => $value) {
             preg_match_all('#{!(.*)!}#', $value, $pm_include);
             $tmp = $pm_include[1];

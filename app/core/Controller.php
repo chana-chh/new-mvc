@@ -1,6 +1,7 @@
 <?php
 
 class Controller {
+
     protected $app;
     protected $view;
 

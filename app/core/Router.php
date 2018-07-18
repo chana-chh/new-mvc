@@ -124,7 +124,7 @@ class Router {
 
     public function generate($routeName, array $params = []) {
         if (!isset($this->named_routes[$routeName])) {
-            greska('Ne postoji putanja sa tražnim imenom', $routeName);
+            greska('Ne postoji putanja sa traženim imenom', $routeName);
         }
 
         $route = $this->named_routes[$routeName];
