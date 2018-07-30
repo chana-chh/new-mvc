@@ -1,6 +1,7 @@
 <?php
 
 class App {
+
     // Putanje za automatsko ucitavanje klasa
     private $autoload_dirs = [];
     // Putanje aplikacije
